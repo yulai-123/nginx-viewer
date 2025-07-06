@@ -83,6 +83,7 @@ func (cm *CacheManager) GetLogFiles() ([]string, error) {
 	// 打开日志目录
 	dir, err := os.Open(cm.LogPath)
 	if err != nil {
+		logrus.Errorf("打开日志目录失败: %v", err)
 		return nil, fmt.Errorf("打开日志目录失败: %v", err)
 	}
 	defer dir.Close()
@@ -90,6 +91,7 @@ func (cm *CacheManager) GetLogFiles() ([]string, error) {
 	// 读取目录中的所有文件
 	files, err := dir.Readdir(-1)
 	if err != nil {
+		logrus.Errorf("读取日志目录失败: %v", err)
 		return nil, fmt.Errorf("读取日志目录失败: %v", err)
 	}
 

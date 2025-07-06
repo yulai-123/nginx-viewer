@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 )
 
 var (
@@ -34,13 +34,19 @@ func main() {
 	// 初始化API处理器
 	apiHandler := NewAPIHandler(cache, cfg)
 
+	// 创建Gin路由器
+	r := gin.Default()
+
+	// 添加CORS中间件
+	r.Use(corsMiddleware())
+
 	// 注册路由
-	http.HandleFunc("/api/logs", apiHandler.HandleLogs)
+	r.GET("/api/logs", loggingMiddleware(), apiHandler.HandleLogs)
 
 	// 启动服务
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("HTTP服务启动在 %s", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
+	if err := r.Run(addr); err != nil {
 		log.Fatalf("服务启动失败: %v", err)
 	}
 }
