@@ -6,8 +6,8 @@ WORKDIR /app
 # 复制go mod文件
 COPY go.mod go.sum ./
 
-# 下载依赖
-RUN go mod download
+# 下载依赖（使用阿里云 Go 模块代理加速）
+RUN go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/ && go mod download
 
 # 复制源代码
 COPY . .
