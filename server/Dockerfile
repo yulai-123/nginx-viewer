@@ -13,7 +13,7 @@ RUN go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/ && go mod download
 COPY . .
 
 # 构建二进制文件
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 # 生产阶段
 FROM alpine:latest
