@@ -1,3 +1,4 @@
 my_config
 logs
 frontend/node_modules
+server/main
