@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	ShanghaiLocation, _ = time.LoadLocation("Asia/Shanghai")
+	ShanghaiLocation = time.FixedZone("CST", 8*3600) // 上海时区
 )
 
 func InitLogger() error {

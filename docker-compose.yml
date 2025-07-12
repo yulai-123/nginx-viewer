@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: log-viewer-backend
+    ports:
+      - "10001:8080"
+    volumes:
+      - ./logs:/root/logs  # 挂载日志目录（只读）
+      - ./server/config.yaml:/root/config.yaml
+      - /var/log/nginx/:/var/log/nginx/:ro  # 挂载Nginx日志（只读）
+    environment:
+      - GIN_MODE=release
+    restart: unless-stopped
+    networks:
+      - log-viewer-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: log-viewer-frontend
+    ports:
+      - "10002:443"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - log-viewer-network
+
+networks:
+  log-viewer-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
